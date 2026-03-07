@@ -1,9 +1,17 @@
-import { date, pgTable, smallint, text, uuid } from "drizzle-orm/pg-core";
+import {
+  date,
+  pgTable,
+  smallint,
+  text,
+  timestamp,
+  uuid,
+} from "drizzle-orm/pg-core";
 import { baseColumns } from "../base";
 import {
   ACCOUNT_STATUS,
   USER_ROLES,
   type AccountStatus,
+  type OtpPurpose,
   type UserRole,
 } from "@/constants/constant";
 
@@ -40,4 +48,15 @@ export const shops = pgTable("users_shop", {
   timezone: text().notNull(),
   phone: text(),
   address: text(),
+});
+
+export const usersOtp = pgTable("users_otp", {
+  ...baseColumns,
+  user_id: uuid()
+    .notNull()
+    .references(() => users.id, { onDelete: "cascade" }),
+  otp: text().notNull(),
+  purpose: smallint().$type<OtpPurpose>().notNull(),
+  expires_at: timestamp().notNull(),
+  used_at: timestamp(),
 });
