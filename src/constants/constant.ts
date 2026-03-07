@@ -1,8 +1,7 @@
 export const ACCOUNT_STATUS = {
   ACTIVE: 0,
-  PENDING_VERIFICATION: 1,
-  SUSPENDED: 2,
-  BANNED: 3,
+  SUSPENDED: 1,
+  BANNED: 2,
 } as const;
 
 export const USER_ROLES = {
@@ -15,6 +14,11 @@ export const NOTIFICATION_TYPES = {
   MERCHANT: 1,
 } as const;
 
+export const OTP_PURPOSES = {
+  REGISTER: 0,
+  RESET_PASSWORD: 1,
+} as const;
+
 export type UserRole = (typeof USER_ROLES)[keyof typeof USER_ROLES];
 
 export type AccountStatus =
@@ -22,6 +26,8 @@ export type AccountStatus =
 
 export type NotificationType =
   (typeof NOTIFICATION_TYPES)[keyof typeof NOTIFICATION_TYPES];
+
+export type OtpPurpose = (typeof OTP_PURPOSES)[keyof typeof OTP_PURPOSES];
 
 export const ALLOWED_IMAGE_TYPES = new Set([
   "image/jpeg",
