@@ -18,7 +18,6 @@ import {
 export const users = pgTable("users", {
   ...baseColumns,
   email: text().notNull().unique(),
-  username: text().unique(),
   password: text(),
   account_status: smallint()
     .$type<AccountStatus>()
