@@ -32,8 +32,14 @@ jobs:
           password: ${{ secrets.PASSWORD }}
           port: ${{ secrets.PORT }}
           script: |
-            cd /mnt/webapps/pos-api
-            git pull https://${{ secrets.DEPLOY_TOKEN }}@github.com/enkhmgln/pos-api.git main
+            if [ -d /mnt/webapps/pos-api ]; then
+              cd /mnt/webapps/pos-api
+              git pull https://${{ secrets.DEPLOY_TOKEN }}@github.com/enkhmgln/pos-api.git main
+            else
+              cd /mnt/webapps
+              git clone https://${{ secrets.DEPLOY_TOKEN }}@github.com/enkhmgln/pos-api.git pos-api
+              cd pos-api
+            fi
             bun install --frozen-lockfile
             bun run app:build
             bun run db:migrate || true
