@@ -7,6 +7,7 @@ import {
   type OtpPurpose,
 } from "@/constants/constant";
 import { ResponseMessage } from "@/constants/response.messages";
+import { runInTransaction } from "@/db";
 import { generateNumericString } from "@/lib";
 import { userOtpRepository, userRepository, type User } from "@/repositories";
 import { emailService } from "./email.service";
@@ -42,54 +43,58 @@ export class OtpService {
     const otp = generateNumericString(OTP_LENGTH);
 
     let userId: string;
-    if (purpose === OTP_PURPOSES.REGISTER) {
-      if (!password) {
-        throw new HTTPException(StatusCodes.BAD_REQUEST, {
-          message: ResponseMessage.PASSWORD_REQUIRED,
-        });
-      }
-      const existingUser = await userRepository.findByEmail(normalizedEmail);
-      if (existingUser) {
-        throw new HTTPException(StatusCodes.CONFLICT, {
-          message: ResponseMessage.USER_ALREADY_EXISTS,
-        });
-      }
-      const passwordHash = await Bun.password.hash(password, {
-        algorithm: "bcrypt",
-        cost: 10,
-      });
-      const created = await userRepository.create({
-        email: normalizedEmail,
-        password: passwordHash,
-        account_status: ACCOUNT_STATUS.ACTIVE,
-      });
-      const newUser = created[0] as User | undefined;
-      if (!newUser) {
-        throw new HTTPException(StatusCodes.INTERNAL_SERVER_ERROR, {
-          message: ResponseMessage.FAILED_TO_CREATE_USER,
-        });
-      }
-      userId = newUser.id;
-    } else {
-      const existingUser = await userRepository.findByEmail(normalizedEmail);
-      if (!existingUser) {
-        throw new HTTPException(StatusCodes.NOT_FOUND, {
-          message: ResponseMessage.USER_NOT_FOUND,
-        });
-      }
-      await userOtpRepository.deleteByUserIdAndPurpose(
-        existingUser.id,
-        OTP_PURPOSES.RESET_PASSWORD,
-      );
-      userId = existingUser.id;
-    }
 
-    await userOtpRepository.create({
-      user_id: userId,
-      otp,
-      purpose,
-      expires_at: expiresAt,
+    await runInTransaction(async () => {
+      if (purpose === OTP_PURPOSES.REGISTER) {
+        if (!password) {
+          throw new HTTPException(StatusCodes.BAD_REQUEST, {
+            message: ResponseMessage.PASSWORD_REQUIRED,
+          });
+        }
+        const existingUser = await userRepository.findByEmail(normalizedEmail);
+        if (existingUser) {
+          throw new HTTPException(StatusCodes.CONFLICT, {
+            message: ResponseMessage.USER_ALREADY_EXISTS,
+          });
+        }
+        const passwordHash = await Bun.password.hash(password, {
+          algorithm: "bcrypt",
+          cost: 10,
+        });
+        const created = await userRepository.create({
+          email: normalizedEmail,
+          password: passwordHash,
+          account_status: ACCOUNT_STATUS.ACTIVE,
+        });
+        const newUser = created[0] as User | undefined;
+        if (!newUser) {
+          throw new HTTPException(StatusCodes.INTERNAL_SERVER_ERROR, {
+            message: ResponseMessage.FAILED_TO_CREATE_USER,
+          });
+        }
+        userId = newUser.id;
+      } else {
+        const existingUser = await userRepository.findByEmail(normalizedEmail);
+        if (!existingUser) {
+          throw new HTTPException(StatusCodes.NOT_FOUND, {
+            message: ResponseMessage.USER_NOT_FOUND,
+          });
+        }
+        await userOtpRepository.deleteByUserIdAndPurpose(
+          existingUser.id,
+          OTP_PURPOSES.RESET_PASSWORD,
+        );
+        userId = existingUser.id;
+      }
+
+      await userOtpRepository.create({
+        user_id: userId,
+        otp,
+        purpose,
+        expires_at: expiresAt,
+      });
     });
+
     await emailService.sendOtp(email, otp, config.OTP_EXPIRES_MINUTES);
   }
 
