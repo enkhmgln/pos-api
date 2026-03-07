@@ -32,9 +32,9 @@ jobs:
           password: ${{ secrets.PASSWORD }}
           port: ${{ secrets.PORT }}
           script: |
-            cd /mnt/webapps/vendly-api
-            git pull https://${{ secrets.DEPLOY_TOKEN }}@github.com/enkhmgln/vendly-api.git main
+            cd /mnt/webapps/pos-api
+            git pull https://${{ secrets.DEPLOY_TOKEN }}@github.com/enkhmgln/pos-api.git main
             bun install --frozen-lockfile
             bun run app:build
             bun run db:migrate || true
-            pm2 restart vendly-api || pm2 start dist/server.js --name vendly-api --interpreter bun
+            pm2 restart pos-api || pm2 start dist/server.js --name pos-api --interpreter bun
