@@ -9,7 +9,7 @@ import {
   notFoundMiddleware,
   responseMiddleware,
 } from "./middleware";
-import router from "./routes";
+import routes from "./routes/base.route";
 const app = new Hono();
 
 app.use(secureHeaders());
@@ -17,7 +17,7 @@ app.use(cors());
 app.use(logger());
 app.use(responseMiddleware);
 app.onError(globalErrorHandler);
-app.route("/api", router);
+app.route("/api", routes);
 app.notFound(notFoundMiddleware);
 showRoutes(app);
 const server = Bun.serve({
