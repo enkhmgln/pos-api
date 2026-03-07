@@ -21,7 +21,12 @@ export interface SendPaginatedOptions<T> {
   message?: ResponseMessageType;
 }
 
+import type { TokenPayload } from "@/services/token.service";
+
 declare module "hono" {
+  interface ContextVariableMap {
+    authPayload: TokenPayload;
+  }
   interface Context {
     send_success: <T>(options: SendSuccessOptions<T>) => Response;
     send_error: (options: SendErrorOptions) => Response;
