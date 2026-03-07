@@ -5,6 +5,9 @@ export const config = {
   JWT_SECRET: process.env.JWT_SECRET!,
   JWT_EXPIRES_IN: process.env.JWT_EXPIRES_IN ?? "7d",
   JWT_EXPIRES_IN_SECONDS: 7 * 24 * 60 * 60,
+  JWT_REFRESH_SECRET: process.env.JWT_REFRESH_SECRET ?? process.env.JWT_SECRET!,
+  JWT_REFRESH_EXPIRES_IN: process.env.JWT_REFRESH_EXPIRES_IN ?? "30d",
+  JWT_REFRESH_EXPIRES_IN_SECONDS: 30 * 24 * 60 * 60,
   SMTP: {
     HOST: process.env.SMTP_HOST!,
     PORT: Number(process.env.SMTP_PORT) || 2525,
