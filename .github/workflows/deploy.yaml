@@ -32,6 +32,7 @@ jobs:
           password: ${{ secrets.PASSWORD }}
           port: ${{ secrets.PORT }}
           script: |
+            export PATH="/root/.bun/bin:$PATH"
             if [ -d /mnt/webapps/pos-api ]; then
               cd /mnt/webapps/pos-api
               git pull https://${{ secrets.DEPLOY_TOKEN }}@github.com/enkhmgln/pos-api.git main
