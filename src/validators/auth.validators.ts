@@ -20,5 +20,20 @@ export const verifyOtpSchema = z.object({
   purpose: purposeSchema,
 });
 
+export const loginSchema = z.object({
+  email: emailSchema,
+  password: z
+    .string("Нууц үг оруулна уу")
+    .min(1, "Нууц үг хоосон байж болохгүй"),
+});
+
+export const refreshSchema = z.object({
+  refresh_token: z
+    .string("Refresh token оруулна уу")
+    .min(1, "Refresh token хоосон байж болохгүй"),
+});
+
 export type CreateOtpInput = z.infer<typeof createOtpSchema>;
 export type VerifyOtpInput = z.infer<typeof verifyOtpSchema>;
+export type LoginInput = z.infer<typeof loginSchema>;
+export type RefreshInput = z.infer<typeof refreshSchema>;
