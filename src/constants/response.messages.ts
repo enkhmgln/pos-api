@@ -20,6 +20,7 @@ export const ResponseMessage = {
   FAILED_TO_CREATE_USER: "Хэрэглэгч үүсгэхэд алдаа гарлаа",
   USER_NOT_FOUND: "Хэрэглэгч олдсонгүй",
   PASSWORD_REQUIRED: "Нууц үг оруулна уу",
+  OTP_CREATED: "И-мэйл хаягт баталгаажуулах код илгээлээ",
 } as const;
 
 export type ResponseMessageType =
