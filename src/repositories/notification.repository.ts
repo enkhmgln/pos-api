@@ -1,6 +1,6 @@
 import { eq } from "drizzle-orm";
 import type { InferInsertModel, InferSelectModel } from "drizzle-orm";
-import { db } from "@/db";
+import { getClient } from "@/db";
 import { notifications } from "@/db/schema/notifications";
 import { BaseRepository } from "./base.repository";
 
@@ -17,7 +17,7 @@ class NotificationRepository extends BaseRepository<
   }
 
   findByUserId(userId: string) {
-    return db.query.notifications.findMany({
+    return getClient().query.notifications.findMany({
       where: eq(notifications.user_id, userId),
     });
   }

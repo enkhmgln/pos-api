@@ -1,5 +1,4 @@
 import type { InferInsertModel, InferSelectModel } from "drizzle-orm";
-import { db } from "@/db";
 import { faqs } from "@/db/schema/general";
 import { BaseRepository } from "./base.repository";
 

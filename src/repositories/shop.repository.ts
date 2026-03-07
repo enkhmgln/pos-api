@@ -1,6 +1,6 @@
 import { eq } from "drizzle-orm";
 import type { InferInsertModel, InferSelectModel } from "drizzle-orm";
-import { db } from "@/db";
+import { getClient } from "@/db";
 import { shops } from "@/db/schema/users";
 import { BaseRepository } from "./base.repository";
 
@@ -13,7 +13,7 @@ class ShopRepository extends BaseRepository<typeof shops, Shop, ShopInsert> {
   }
 
   findByUserId(userId: string) {
-    return db.query.shops.findFirst({
+    return getClient().query.shops.findFirst({
       where: eq(shops.user_id, userId),
     });
   }

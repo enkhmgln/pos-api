@@ -1,6 +1,6 @@
 import { eq } from "drizzle-orm";
 import type { InferInsertModel, InferSelectModel } from "drizzle-orm";
-import { db } from "@/db";
+import { getClient } from "@/db";
 import { users } from "@/db/schema/users";
 import { BaseRepository } from "./base.repository";
 
@@ -13,7 +13,7 @@ class UserRepository extends BaseRepository<typeof users, User, UserInsert> {
   }
 
   findByEmail(email: string) {
-    return db.query.users.findFirst({
+    return getClient().query.users.findFirst({
       where: eq(users.email, email.toLowerCase().trim()),
     });
   }

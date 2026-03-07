@@ -1,6 +1,6 @@
 import { eq } from "drizzle-orm";
 import type { InferInsertModel, InferSelectModel } from "drizzle-orm";
-import { db } from "@/db";
+import { getClient } from "@/db";
 import { fcmTokens } from "@/db/schema/notifications";
 import { BaseRepository } from "./base.repository";
 
@@ -17,7 +17,7 @@ class FcmTokenRepository extends BaseRepository<
   }
 
   findByUserId(userId: string) {
-    return db.query.fcmTokens.findMany({
+    return getClient().query.fcmTokens.findMany({
       where: eq(fcmTokens.user_id, userId),
     });
   }
