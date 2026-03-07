@@ -25,10 +25,7 @@ class UserOtpRepository extends BaseRepository<
 
   findByUserIdAndPurpose(userId: string, purpose: OtpPurpose) {
     return db.query.usersOtp.findMany({
-      where: and(
-        eq(usersOtp.user_id, userId),
-        eq(usersOtp.purpose, purpose),
-      ),
+      where: and(eq(usersOtp.user_id, userId), eq(usersOtp.purpose, purpose)),
     });
   }
 
