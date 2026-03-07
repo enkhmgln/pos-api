@@ -40,7 +40,6 @@ export class OtpService {
       Date.now() + config.OTP_EXPIRES_MINUTES * 60 * 1000,
     );
     const otp = generateNumericString(OTP_LENGTH);
-    const token = crypto.randomUUID();
 
     let userId: string;
     if (purpose === OTP_PURPOSES.REGISTER) {
