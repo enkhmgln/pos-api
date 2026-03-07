@@ -1,4 +1,4 @@
-import { and, eq } from "drizzle-orm";
+import { and, eq, gt, isNull } from "drizzle-orm";
 import type { InferInsertModel, InferSelectModel } from "drizzle-orm";
 import type { OtpPurpose } from "@/constants/constant";
 import { db } from "@/db";
@@ -30,6 +30,29 @@ class UserOtpRepository extends BaseRepository<
         eq(usersOtp.purpose, purpose),
       ),
     });
+  }
+
+  findValidOtp(userId: string, purpose: OtpPurpose, otp: string) {
+    return db.query.usersOtp.findFirst({
+      where: and(
+        eq(usersOtp.user_id, userId),
+        eq(usersOtp.purpose, purpose),
+        eq(usersOtp.otp, otp),
+        isNull(usersOtp.used_at),
+        gt(usersOtp.expires_at, new Date()),
+      ),
+    });
+  }
+
+  deleteByUserIdAndPurpose(userId: string, purpose: OtpPurpose) {
+    return db
+      .delete(usersOtp)
+      .where(
+        and(
+          eq(usersOtp.user_id, userId),
+          eq(usersOtp.purpose, purpose),
+        ),
+      );
   }
 }
 
