@@ -1,20 +1,25 @@
 export const ResponseMessage = {
   // Success
-  REQUEST_SUCCESS: "Request successful",
+  REQUEST_SUCCESS: "Хүсэлт амжилттай",
 
   // Client errors
-  INVALID_INPUT: "Invalid input",
-  INVALID_JSON: "Invalid or empty request body",
-  BAD_REQUEST: "Bad request",
-  UNAUTHORIZED: "Unauthorized",
-  FORBIDDEN: "Forbidden",
-  NOT_FOUND: "Not found",
-  REQUEST_UNSUCCESS: "Request failed. Please try again",
-  UPLOAD_FILE_TOO_LARGE: "File too large. Max 10 MB.",
+  INVALID_INPUT: "Буруу утга",
+  INVALID_JSON: "Алдаатай JSON утга",
+  BAD_REQUEST: "Алдаатай хүсэлт",
+  UNAUTHORIZED: "Зөвшөөрөлгүй",
+  FORBIDDEN: "Эрх хүрэхгүй байна",
+  NOT_FOUND: "Олдсонгүй",
+  REQUEST_UNSUCCESS: "Хүсэлт амжилтгүй. Дахин оролдоно уу",
+  UPLOAD_FILE_TOO_LARGE: "Файл хэт их байна. 10 MB хэмжээтэй байна.",
 
   // Server / external
-  INTERNAL_SERVER_ERROR: "Internal server error",
-  EXTERNAL_SERVICE_ERROR: "External service error",
+  INTERNAL_SERVER_ERROR: "Дотоод сервер алдаа гарлаа",
+  USER_ALREADY_EXISTS: "Хэрэглэгч бүртгэлтэй байна",
+  OTP_NOT_FOUND: "Баталгаажуулах код олдсонгүй",
+  OTP_EXPIRED: "Баталгаажуулах код хугацаа дууссан",
+  FAILED_TO_CREATE_USER: "Хэрэглэгч үүсгэхэд алдаа гарлаа",
+  USER_NOT_FOUND: "Хэрэглэгч олдсонгүй",
+  PASSWORD_REQUIRED: "Нууц үг оруулна уу",
 } as const;
 
 export type ResponseMessageType =
