@@ -1,15 +1,9 @@
 import { StatusCodes } from "http-status-codes";
-import { eq } from "drizzle-orm";
 import { HTTPException } from "hono/http-exception";
-import { config } from "@/constants/config";
-import { generateNumericString } from "@/lib";
-import { db } from "@/db";
-import { users } from "@/db/schema/users";
 import { ResponseMessage } from "@/constants/response.messages";
-import { emailService } from "./email.service";
+import { userRepository } from "@/repositories";
+import type { TokenPayload } from "./token.service";
 import { tokenService } from "./token.service";
-
-const OTP_LENGTH = 4;
 
 export interface AppUser {
   id: string;
@@ -22,6 +16,58 @@ export interface AuthResult {
   expires_in: number;
 }
 
-export class AuthService {}
+export interface LoginResult extends AuthResult {
+  refresh_token: string;
+  refresh_expires_in: number;
+}
+
+export class AuthService {
+  async login(email: string, password: string): Promise<LoginResult> {
+    const normalizedEmail = email.toLowerCase().trim();
+    const user = await userRepository.findByEmail(normalizedEmail);
+    if (!user) {
+      throw new HTTPException(StatusCodes.BAD_REQUEST, {
+        message: ResponseMessage.UNAUTHORIZED,
+      });
+    }
+    const valid = await Bun.password.verify(password, user.password, "bcrypt");
+    if (!valid) {
+      throw new HTTPException(StatusCodes.BAD_REQUEST, {
+        message: ResponseMessage.UNAUTHORIZED,
+      });
+    }
+    const { accessToken, expiresIn } = await tokenService.encode(
+      user.id,
+      user.role,
+    );
+    const { refreshToken, expiresIn: refreshExpiresIn } =
+      await tokenService.encodeRefresh(user.id, user.role);
+    return {
+      user: { id: user.id, email: user.email },
+      access_token: accessToken,
+      expires_in: expiresIn,
+      refresh_token: refreshToken,
+      refresh_expires_in: refreshExpiresIn,
+    };
+  }
+
+  async refresh(payload: TokenPayload): Promise<AuthResult> {
+    const user = await userRepository.findById(payload.userId);
+    if (!user) {
+      throw new HTTPException(StatusCodes.BAD_REQUEST, {
+        message: ResponseMessage.UNAUTHORIZED,
+      });
+    }
+    const { accessToken, expiresIn } = await tokenService.encode(
+      user.id,
+      user.role,
+    );
+    return {
+      user: { id: user.id, email: user.email },
+      access_token: accessToken,
+      expires_in: expiresIn,
+    };
+  }
+}
 
 export const authService = new AuthService();
