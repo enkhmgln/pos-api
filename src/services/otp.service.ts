@@ -10,6 +10,7 @@ import { ResponseMessage } from "@/constants/response.messages";
 import { runInTransaction } from "@/db";
 import { generateNumericString } from "@/lib";
 import { userOtpRepository, userRepository, type User } from "@/repositories";
+import type { LoginResult } from "./auth.service";
 import { emailService } from "./email.service";
 import { tokenService } from "./token.service";
 
@@ -25,12 +26,6 @@ export interface VerifyOtpParams {
   email: string;
   otp: string;
   purpose: OtpPurpose;
-}
-
-export interface VerifyOtpResult {
-  user: { id: string; email: string };
-  access_token: string;
-  expires_in: number;
 }
 
 export class OtpService {
@@ -98,7 +93,7 @@ export class OtpService {
     await emailService.sendOtp(email, otp, config.OTP_EXPIRES_MINUTES);
   }
 
-  async verifyOtp(params: VerifyOtpParams): Promise<VerifyOtpResult> {
+  async verifyOtp(params: VerifyOtpParams): Promise<LoginResult> {
     const { email, otp, purpose } = params;
     const normalizedEmail = email.toLowerCase().trim();
     const user = await userRepository.findByEmail(normalizedEmail);
@@ -123,10 +118,14 @@ export class OtpService {
       user.id,
       user.role,
     );
+    const { refreshToken, expiresIn: refreshExpiresIn } =
+      await tokenService.encodeRefresh(user.id, user.role);
     return {
       user: { id: user.id, email: user.email },
       access_token: accessToken,
       expires_in: expiresIn,
+      refresh_token: refreshToken,
+      refresh_expires_in: refreshExpiresIn,
     };
   }
 }

@@ -1,11 +1,11 @@
 import { Hono } from "hono";
 import { StatusCodes } from "http-status-codes";
 import { ResponseMessage } from "@/constants/response.messages";
-import { requireAuth } from "@/middleware";
 import { authService, otpService } from "@/services";
 import {
   createOtpSchema,
   loginSchema,
+  refreshSchema,
   verifyOtpSchema,
 } from "@/validators/auth.validators";
 
@@ -48,8 +48,12 @@ authController.post("/login", async (c) => {
   return c.send_success({ data: result });
 });
 
-authController.post("/refresh", requireAuth, async (c) => {
-  const payload = c.get("authPayload");
-  const result = await authService.refresh(payload);
+authController.post("/refresh", async (c) => {
+  const body = await c.req.json();
+  const parsed = refreshSchema.safeParse(body);
+  if (!parsed.success) {
+    return c.send_validation_error(parsed.error);
+  }
+  const result = await authService.refresh(parsed.data.refresh_token);
   return c.send_success({ data: result });
 });
