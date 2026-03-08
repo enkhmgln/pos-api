@@ -33,7 +33,7 @@ export class AuthService {
     const valid = await Bun.password.verify(password, user.password, "bcrypt");
     if (!valid) {
       throw new HTTPException(StatusCodes.BAD_REQUEST, {
-        message: ResponseMessage.UNAUTHORIZED,
+        message: ResponseMessage.INVALID_CREDENTIALS,
       });
     }
     const { accessToken, expiresIn } = await tokenService.encode(

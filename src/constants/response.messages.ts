@@ -21,6 +21,7 @@ export const ResponseMessage = {
   USER_NOT_FOUND: "Хэрэглэгч олдсонгүй",
   PASSWORD_REQUIRED: "Нууц үг оруулна уу",
   OTP_CREATED: "И-мэйл хаягт баталгаажуулах код илгээлээ",
+  INVALID_CREDENTIALS: "Нууц үг эсвэл и-мэйл хаяг буруу байна",
 } as const;
 
 export type ResponseMessageType =
