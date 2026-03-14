@@ -2,6 +2,7 @@ export const ACCOUNT_STATUS = {
   ACTIVE: 0,
   SUSPENDED: 1,
   BANNED: 2,
+  PENDING: 3, // Registered but OTP not verified yet
 } as const;
 
 export const USER_ROLES = {

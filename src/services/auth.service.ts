@@ -1,5 +1,6 @@
 import { StatusCodes } from "http-status-codes";
 import { HTTPException } from "hono/http-exception";
+import { ACCOUNT_STATUS } from "@/constants/constant";
 import { ResponseMessage } from "@/constants/response.messages";
 import { userRepository } from "@/repositories";
 import { tokenService } from "./token.service";
@@ -33,6 +34,11 @@ export class AuthService {
     if (!valid) {
       throw new HTTPException(StatusCodes.BAD_REQUEST, {
         message: ResponseMessage.INVALID_CREDENTIALS,
+      });
+    }
+    if (user.account_status !== ACCOUNT_STATUS.ACTIVE) {
+      throw new HTTPException(StatusCodes.FORBIDDEN, {
+        message: ResponseMessage.ACCOUNT_NOT_VERIFIED,
       });
     }
     const { accessToken, expiresIn } = await tokenService.encode(

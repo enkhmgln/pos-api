@@ -22,6 +22,7 @@ export const ResponseMessage = {
   PASSWORD_REQUIRED: "Нууц үг оруулна уу",
   OTP_CREATED: "И-мэйл хаягт баталгаажуулах код илгээлээ",
   INVALID_CREDENTIALS: "Нууц үг эсвэл и-мэйл хаяг буруу байна",
+  ACCOUNT_NOT_VERIFIED: "И-мэйлээ баталгаажуулна уу",
 } as const;
 
 export type ResponseMessageType =

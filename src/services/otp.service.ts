@@ -59,7 +59,7 @@ export class OtpService {
         const created = await userRepository.create({
           email: normalizedEmail,
           password: passwordHash,
-          account_status: ACCOUNT_STATUS.ACTIVE,
+          account_status: ACCOUNT_STATUS.PENDING,
         });
         const newUser = created[0] as User | undefined;
         if (!newUser) {
@@ -113,6 +113,12 @@ export class OtpService {
     await userOtpRepository.update(otpRow.id, {
       used_at: new Date(),
     });
+
+    if (purpose === OTP_PURPOSES.REGISTER) {
+      await userRepository.update(user.id, {
+        account_status: ACCOUNT_STATUS.ACTIVE,
+      });
+    }
 
     const { accessToken, expiresIn } = await tokenService.encode(
       user.id,
