@@ -16,4 +16,5 @@ export const config = {
     FROM: process.env.SMTP_FROM!,
   },
   OTP_EXPIRES_MINUTES: Number(process.env.OTP_EXPIRES_MINUTES) || 10,
+  UPLOAD_DIR: "public/uploads",
 } as const;

@@ -30,10 +30,19 @@ export type NotificationType =
 
 export type OtpPurpose = (typeof OTP_PURPOSES)[keyof typeof OTP_PURPOSES];
 
-export const ALLOWED_IMAGE_TYPES = new Set([
+export const ALLOWED_FILE_TYPES = [
   "image/jpeg",
   "image/png",
   "image/webp",
   "image/gif",
-]);
+  "application/pdf",
+  "application/msword",
+  "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+  "application/vnd.ms-excel",
+  "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+  "application/vnd.ms-powerpoint",
+  "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+  "application/vnd.ms-powerpoint.presentation.macroEnabled.12",
+  "application/vnd.ms-powerpoint.template.macroEnabled.12",
+] as const;
 export const MAX_SIZE_BYTES = 10 * 1024 * 1024; // 10 MB
