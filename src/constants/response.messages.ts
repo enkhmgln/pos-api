@@ -8,12 +8,12 @@ export const ResponseMessage = {
   BAD_REQUEST: "Алдаатай хүсэлт",
   UNAUTHORIZED: "Зөвшөөрөлгүй",
   FORBIDDEN: "Эрх хүрэхгүй байна",
-  NOT_FOUND: "Олдсонгүй",
+  NOT_FOUND: "Таны хайж байгаа хуудас олдсонгүй",
   REQUEST_UNSUCCESS: "Хүсэлт амжилтгүй. Дахин оролдоно уу",
   UPLOAD_FILE_TOO_LARGE: "Файл хэт их байна. 10 MB хэмжээтэй байна.",
 
   // Server / external
-  INTERNAL_SERVER_ERROR: "Дотоод сервер алдаа гарлаа",
+  INTERNAL_SERVER_ERROR: "Дотоод сервер алдаа гарлаа. Та дахин оролдоно уу",
   USER_ALREADY_EXISTS: "Хэрэглэгч бүртгэлтэй байна",
   OTP_NOT_FOUND: "Баталгаажуулах код олдсонгүй",
   OTP_EXPIRED: "Баталгаажуулах код хугацаа дууссан",
