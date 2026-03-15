@@ -1,2 +1,2 @@
 export { baseAxios } from "./axios";
-export { generateNumericString, toNull } from "./utils";
+export { generateNumericString, mapDefined, toNull } from "./utils";

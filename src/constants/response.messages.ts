@@ -13,7 +13,7 @@ export const ResponseMessage = {
   UPLOAD_FILE_TOO_LARGE: "Файл хэт их байна. 10 MB хэмжээтэй байна.",
 
   // Server / external
-  INTERNAL_SERVER_ERROR: "Дотоод сервер алдаа гарлаа. Та дахин оролдоно уу",
+  INTERNAL_SERVER_ERROR: "Дотоод сервер алдаа гарлаа. Дараа дахин оролдоно уу",
   USER_ALREADY_EXISTS: "Хэрэглэгч бүртгэлтэй байна",
   OTP_NOT_FOUND: "Баталгаажуулах код олдсонгүй",
   OTP_EXPIRED: "Баталгаажуулах код хугацаа дууссан",
@@ -23,6 +23,8 @@ export const ResponseMessage = {
   OTP_CREATED: "И-мэйл хаягт баталгаажуулах код илгээлээ",
   INVALID_CREDENTIALS: "Нууц үг эсвэл и-мэйл хаяг буруу байна",
   ACCOUNT_NOT_VERIFIED: "И-мэйлээ баталгаажуулна уу",
+  FILE_NOT_FOUND: "Файл олдсонгүй",
+  INVALID_FILE_TYPE: "Файлын төрөл зөвшөөрөгдөөгүй байна",
 } as const;
 
 export type ResponseMessageType =

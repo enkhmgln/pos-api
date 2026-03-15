@@ -34,7 +34,7 @@ export const userProfiles = pgTable("users_profile", {
   first_name: text(),
   last_name: text(),
   phone: text(),
-  avatar_url: text(),
+  avatar_file_id: uuid(),
   location: text(),
   birthdate: date(),
 });
