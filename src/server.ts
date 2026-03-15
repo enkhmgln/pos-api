@@ -25,4 +25,4 @@ const server = Bun.serve({
   fetch: app.fetch,
 });
 
-console.log(`Listening on ${server.url}1`);
+console.log(`Listening on ${server.url}`);
